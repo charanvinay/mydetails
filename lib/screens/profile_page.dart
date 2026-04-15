@@ -29,7 +29,18 @@ class ProfilePage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(
+        leadingWidth: 64,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: IconButton(
+            onPressed: () => Navigator.of(context).maybePop(),
+            icon: const Icon(Icons.arrow_back_rounded),
+          ),
+        ),
+        titleSpacing: 8,
+        title: const Text('Profile'),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

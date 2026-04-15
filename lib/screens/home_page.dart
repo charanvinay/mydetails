@@ -144,18 +144,17 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Details'),
+          titleSpacing: 16,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: IconButton(
-                onPressed: _openProfile,
-                tooltip: 'Profile',
-                icon: const CircleAvatar(
-                  radius: 16,
-                  child: Icon(Icons.person_rounded, size: 18),
-                ),
+            InkResponse(
+              onTap: _openProfile,
+              radius: 20,
+              child: const CircleAvatar(
+                radius: 16,
+                child: Icon(Icons.person_rounded, size: 18),
               ),
             ),
+            const SizedBox(width: 16),
           ],
         ),
         body: _HomeDashboard(
@@ -199,13 +198,6 @@ class _HomeDashboard extends StatelessWidget {
           hintText: 'Search in all sections...',
           leading: const Icon(Icons.search_rounded),
           onChanged: onSearchChanged,
-          elevation: WidgetStateProperty.all(0),
-          backgroundColor: WidgetStateProperty.all(
-            theme.colorScheme.surfaceContainerHigh,
-          ),
-          shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          ),
         ),
         const SizedBox(height: 24),
         for (final section in sections) ...[

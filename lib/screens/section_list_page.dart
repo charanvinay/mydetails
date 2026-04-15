@@ -36,7 +36,18 @@ class _SectionListPageState extends State<SectionListPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(title: Text(section.title)),
+        appBar: AppBar(
+          leadingWidth: 64,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: IconButton(
+              onPressed: () => Navigator.of(context).maybePop(),
+              icon: const Icon(Icons.arrow_back_rounded),
+            ),
+          ),
+          titleSpacing: 8,
+          title: Text(section.title),
+        ),
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           children: [
@@ -85,13 +96,6 @@ class _SectionListPageState extends State<SectionListPage> {
               hintText: 'Search in ${section.title.toLowerCase()}...',
               leading: const Icon(Icons.search_rounded),
               onChanged: (value) => setState(() => _query = value),
-              elevation: WidgetStateProperty.all(0),
-              backgroundColor: WidgetStateProperty.all(
-                theme.colorScheme.surfaceContainerHigh,
-              ),
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              ),
             ),
             const SizedBox(height: 20),
             for (var index = 0; index < filteredItems.length; index++)

@@ -17,6 +17,7 @@ class AppTheme {
         elevation: 0,
         foregroundColor: scheme.onSurface,
         centerTitle: false,
+        titleSpacing: 16,
         titleTextStyle: TextStyle(
           color: scheme.onSurface,
           fontSize: 20,
@@ -77,7 +78,18 @@ class AppTheme {
       ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
+          backgroundColor: seed.withValues(alpha: 0.1),
           foregroundColor: seed,
+          shape: const CircleBorder(),
+          minimumSize: const Size(40, 40),
+          fixedSize: const Size(40, 40),
+        ),
+      ),
+      searchBarTheme: SearchBarThemeData(
+        elevation: WidgetStateProperty.all(0),
+        backgroundColor: WidgetStateProperty.all(seed.withValues(alpha: 0.1)),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
@@ -106,6 +118,7 @@ class AppTheme {
         elevation: 0,
         foregroundColor: scheme.onSurface,
         centerTitle: false,
+        titleSpacing: 16,
         titleTextStyle: TextStyle(
           color: scheme.onSurface,
           fontSize: 20,
@@ -158,7 +171,18 @@ class AppTheme {
       ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
-          foregroundColor: seed,
+          backgroundColor: seed.withValues(alpha: 0.25),
+          foregroundColor: Colors.white,
+          shape: const CircleBorder(),
+          minimumSize: const Size(40, 40),
+          fixedSize: const Size(40, 40),
+        ),
+      ),
+      searchBarTheme: SearchBarThemeData(
+        elevation: WidgetStateProperty.all(0),
+        backgroundColor: WidgetStateProperty.all(const Color(0xFF1E1E1E)),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
       pageTransitionsTheme: const PageTransitionsTheme(

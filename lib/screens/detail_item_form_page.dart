@@ -152,10 +152,15 @@ class _DetailItemFormPageState extends State<DetailItemFormPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).maybePop(),
-          icon: const Icon(Icons.close_rounded),
+        leadingWidth: 64,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: IconButton(
+            onPressed: () => Navigator.of(context).maybePop(),
+            icon: const Icon(Icons.close_rounded),
+          ),
         ),
+        titleSpacing: 8,
         title: Text(
           widget.isEditing
               ? 'Edit ${widget.section.title}'
@@ -172,6 +177,7 @@ class _DetailItemFormPageState extends State<DetailItemFormPage> {
               icon: const Icon(Icons.delete_outline_rounded),
               tooltip: 'Delete',
             ),
+          const SizedBox(width: 16),
         ],
       ),
       body: SafeArea(
