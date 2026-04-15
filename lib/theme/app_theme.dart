@@ -92,6 +92,18 @@ class AppTheme {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: seed, width: 2),
+        ),
+        floatingLabelStyle: TextStyle(color: seed),
+      ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -112,9 +124,9 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: const Color(0xFF0A0A0B),
+      scaffoldBackgroundColor: const Color(0xFF0B0B0D),
       appBarTheme: AppBarTheme(
-        backgroundColor: const Color(0xFF0A0A0B),
+        backgroundColor: const Color(0xFF0B0B0D),
         elevation: 0,
         foregroundColor: scheme.onSurface,
         centerTitle: false,
@@ -126,9 +138,9 @@ class AppTheme {
           letterSpacing: -0.5,
         ),
       ),
-      dividerColor: const Color(0xFF121826),
+      dividerColor: const Color(0xFF1C1C1E).withValues(alpha: 0.5),
       cardTheme: CardThemeData(
-        color: const Color(0xFF18191A),
+        color: const Color(0xFF16161A),
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -180,7 +192,7 @@ class AppTheme {
       ),
       searchBarTheme: SearchBarThemeData(
         elevation: WidgetStateProperty.all(0),
-        backgroundColor: WidgetStateProperty.all(const Color(0xFF1E1E1E)),
+        backgroundColor: WidgetStateProperty.all(const Color(0xFF16161A)),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
@@ -191,6 +203,18 @@ class AppTheme {
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
           TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
         },
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Color(0xFF4185F4), width: 2),
+        ),
+        floatingLabelStyle: const TextStyle(color: Color(0xFF4185F4)),
       ),
     );
   }

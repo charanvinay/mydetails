@@ -150,92 +150,94 @@ class _DetailItemFormPageState extends State<DetailItemFormPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 64,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: IconButton(
-            onPressed: () => Navigator.of(context).maybePop(),
-            icon: const Icon(Icons.close_rounded),
-          ),
-        ),
-        titleSpacing: 8,
-        title: Text(
-          widget.isEditing
-              ? 'Edit ${widget.section.title}'
-              : 'Add ${widget.section.title}',
-        ),
-        actions: [
-          if (widget.isEditing)
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pop(
-                  const DetailEditorResult(action: DetailEditorAction.delete),
-                );
-              },
-              icon: const Icon(Icons.delete_outline_rounded),
-              tooltip: 'Delete',
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          leadingWidth: 64,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: IconButton(
+              onPressed: () => Navigator.of(context).maybePop(),
+              icon: const Icon(Icons.close_rounded),
             ),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
-                  children: [
-                    const SizedBox(height: 10),
-                    for (final field in _fields) ...[
-                      TextFormField(
-                        controller: _controllers[field.key],
-                        obscureText:
-                            field.key == 'password' || field.key == 'cvv',
-                        keyboardType: _keyboardType(field.key),
-                        decoration: InputDecoration(
-                          labelText: field.label,
-                          border: const OutlineInputBorder(),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Required';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 14),
-                    ],
-                  ],
-                ),
+          ),
+          titleSpacing: 8,
+          title: Text(
+            widget.isEditing
+                ? 'Edit ${widget.section.title}'
+                : 'Add ${widget.section.title}',
+          ),
+          actions: [
+            if (widget.isEditing)
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop(
+                    const DetailEditorResult(action: DetailEditorAction.delete),
+                  );
+                },
+                icon: const Icon(Icons.delete_outline_rounded),
+                tooltip: 'Delete',
               ),
-              SafeArea(
-                top: false,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-                  child: Row(
+            const SizedBox(width: 16),
+          ],
+        ),
+        body: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
                     children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => Navigator.of(context).maybePop(),
-                          child: const Text('Cancel'),
+                      const SizedBox(height: 10),
+                      for (final field in _fields) ...[
+                        TextFormField(
+                          controller: _controllers[field.key],
+                          obscureText:
+                              field.key == 'password' || field.key == 'cvv',
+                          keyboardType: _keyboardType(field.key),
+                          decoration: InputDecoration(
+                            labelText: field.label,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Required';
+                            }
+                            return null;
+                          },
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _save,
-                          child: Text(widget.isEditing ? 'Update' : 'Save'),
-                        ),
-                      ),
+                        const SizedBox(height: 14),
+                      ],
                     ],
                   ),
                 ),
-              ),
-            ],
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () => Navigator.of(context).maybePop(),
+                            child: const Text('Cancel'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _save,
+                            child: Text(widget.isEditing ? 'Update' : 'Save'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
