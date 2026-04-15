@@ -15,9 +15,9 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
 class _HomePageState extends State<HomePage> {
   late List<DetailSection> _sections;
+  String _searchQuery = '';
 
   @override
   void initState() {
@@ -30,6 +30,20 @@ class _HomePageState extends State<HomePage> {
           ),
         )
         .toList();
+  }
+
+  List<DetailSection> get _filteredSections {
+    if (_searchQuery.isEmpty) return _sections;
+
+    final query = _searchQuery.toLowerCase();
+    return _sections.map((section) {
+      final items = section.items.where((item) {
+        return item.title.toLowerCase().contains(query) ||
+               item.subtitle.toLowerCase().contains(query) ||
+               item.trailing.toLowerCase().contains(query);
+      }).toList();
+      return section.copyWith(items: items);
+    }).where((section) => section.items.isNotEmpty).toList();
   }
 
   Future<void> _openAddChooser() async {
@@ -120,32 +134,36 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Details'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: IconButton(
-              onPressed: _openProfile,
-              tooltip: 'Profile',
-              icon: const CircleAvatar(
-                radius: 16,
-                child: Icon(Icons.person_rounded, size: 18),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('My Details'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: IconButton(
+                onPressed: _openProfile,
+                tooltip: 'Profile',
+                icon: const CircleAvatar(
+                  radius: 16,
+                  child: Icon(Icons.person_rounded, size: 18),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: _HomeDashboard(
-        sections: _sections,
-        onShowMore: _openSectionList,
-        onItemTap: (type, itemIndex) =>
-            _openEditor(type: type, itemIndex: itemIndex),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openAddChooser,
-        child: const Icon(Icons.add_rounded),
+          ],
+        ),
+        body: _HomeDashboard(
+          sections: _filteredSections,
+          onSearchChanged: (value) => setState(() => _searchQuery = value),
+          onShowMore: _openSectionList,
+          onItemTap: (type, itemIndex) =>
+              _openEditor(type: type, itemIndex: itemIndex),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _openAddChooser,
+          child: const Icon(Icons.add_rounded),
+        ),
       ),
     );
   }
@@ -154,11 +172,13 @@ class _HomePageState extends State<HomePage> {
 class _HomeDashboard extends StatelessWidget {
   const _HomeDashboard({
     required this.sections,
+    required this.onSearchChanged,
     required this.onShowMore,
     required this.onItemTap,
   });
 
   final List<DetailSection> sections;
+  final ValueChanged<String> onSearchChanged;
   final ValueChanged<DetailSection> onShowMore;
   final void Function(DetailSectionType type, int itemIndex) onItemTap;
 
@@ -167,57 +187,22 @@ class _HomeDashboard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
-        Container(
-          padding: const EdgeInsets.all(22),
-          decoration: BoxDecoration(
-            color: theme.cardTheme.color,
-            borderRadius: BorderRadius.circular(28),
-            border: Border.all(
-              color: theme.dividerColor.withValues(alpha: 0.9),
-            ),
+        const SizedBox(height: 16),
+        SearchBar(
+          hintText: 'Search in all sections...',
+          leading: const Icon(Icons.search_rounded),
+          onChanged: onSearchChanged,
+          elevation: WidgetStateProperty.all(0),
+          backgroundColor: WidgetStateProperty.all(
+            theme.colorScheme.surfaceContainerHigh,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  'Secure vault',
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Everything important in one place',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: -0.2,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Tap any item to edit it, use show more to view all entries, or press the plus button to add something manually.',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  height: 1.5,
-                ),
-              ),
-            ],
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 24),
         for (final section in sections) ...[
           SectionPreview(
             section: section,
@@ -226,6 +211,7 @@ class _HomeDashboard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
         ],
+        const SizedBox(height: 100), // FAB space
       ],
     );
   }

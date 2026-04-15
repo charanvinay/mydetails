@@ -1,6 +1,6 @@
 {
-    "name": "mydetails",
-    "short_name": "mydetails",
+    "name": "My Details",
+    "short_name": "My Details",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

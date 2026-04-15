@@ -1,4 +1,4 @@
-# mydetails
+# My Details
 
 A new Flutter project.
 

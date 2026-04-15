@@ -54,9 +54,14 @@ class SectionPreview extends StatelessWidget {
                     ],
                   ),
                 ),
-                TextButton(
+                IconButton(
                   onPressed: onShowMore,
-                  child: const Text('Show more'),
+                  icon: const Icon(Icons.chevron_right_rounded),
+                  tooltip: 'Show more',
+                  style: IconButton.styleFrom(
+                    backgroundColor: theme.colorScheme.surfaceContainerHigh,
+                    foregroundColor: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
