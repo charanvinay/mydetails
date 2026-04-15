@@ -214,14 +214,14 @@ class _DetailItemFormPageState extends State<DetailItemFormPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: OutlinedButton(
+                        child: TextButton(
                           onPressed: () => Navigator.of(context).maybePop(),
                           child: const Text('Cancel'),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: FilledButton(
+                        child: ElevatedButton(
                           onPressed: _save,
                           child: Text(widget.isEditing ? 'Update' : 'Save'),
                         ),

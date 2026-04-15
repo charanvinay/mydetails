@@ -144,7 +144,7 @@ class _AuthGatePageState extends State<AuthGatePage> {
                   const SizedBox(height: 24),
                   if (isAuthenticating) const CircularProgressIndicator(),
                   if (!isAuthenticating)
-                    FilledButton(
+                    ElevatedButton(
                       onPressed: _authenticate,
                       child: const Text('Try again'),
                     ),

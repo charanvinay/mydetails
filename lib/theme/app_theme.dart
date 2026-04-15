@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData light() {
-    const seed = Color(0xFF1F4D8F);
+    const seed = Color(0xFF176EDE);
     final scheme = ColorScheme.fromSeed(
       seedColor: seed,
       brightness: Brightness.light,
+    ).copyWith(
+      primary: seed,
+      onPrimary: Colors.white,
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: const Color(0xFFF6F4EF),
+      scaffoldBackgroundColor: const Color(0xFFF1F5FE),
       appBarTheme: AppBarTheme(
-        backgroundColor: const Color(0xFFF6F4EF),
+        backgroundColor: const Color(0xFFF1F5FE),
         elevation: 0,
         foregroundColor: scheme.onSurface,
         centerTitle: false,
@@ -24,15 +27,17 @@ class AppTheme {
           letterSpacing: -0.5,
         ),
       ),
-      dividerColor: const Color(0xFFE1DDD3),
+      dividerColor: const Color(0xFFE2E8F0),
       cardTheme: CardThemeData(
-        color: const Color(0xFFFFFCF6),
+        color: const Color(0xFFFFFFFF),
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
+          backgroundColor: seed,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -41,6 +46,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          backgroundColor: seed.withValues(alpha: 0.1),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -49,6 +55,8 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
+          backgroundColor: seed.withValues(alpha: 0.1),
+          side: BorderSide.none,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -57,11 +65,18 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          backgroundColor: seed,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          elevation: 2,
         ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: seed,
+        foregroundColor: Colors.white,
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
@@ -74,18 +89,21 @@ class AppTheme {
   }
 
   static ThemeData dark() {
-    const seed = Color(0xFF8AAEE0);
+    const seed = Color(0xFF176EDE);
     final scheme = ColorScheme.fromSeed(
       seedColor: seed,
       brightness: Brightness.dark,
+    ).copyWith(
+      primary: seed,
+      onPrimary: Colors.white,
     );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: const Color(0xFF12161C),
+      scaffoldBackgroundColor: const Color(0xFF0A0A0B),
       appBarTheme: AppBarTheme(
-        backgroundColor: const Color(0xFF12161C),
+        backgroundColor: const Color(0xFF0A0A0B),
         elevation: 0,
         foregroundColor: scheme.onSurface,
         centerTitle: false,
@@ -96,23 +114,16 @@ class AppTheme {
           letterSpacing: -0.5,
         ),
       ),
-      dividerColor: const Color(0xFF2A313B),
+      dividerColor: const Color(0xFF121826),
       cardTheme: CardThemeData(
-        color: const Color(0xFF1A2028),
+        color: const Color(0xFF18191A),
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          backgroundColor: seed.withValues(alpha: 0.15),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -121,6 +132,8 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
+          backgroundColor: seed.withValues(alpha: 0.15),
+          side: BorderSide.none,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -129,11 +142,18 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          backgroundColor: seed,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          elevation: 2,
         ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: seed,
+        foregroundColor: Colors.white,
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {

@@ -7,7 +7,7 @@ const List<DetailSection> demoSections = [
     type: DetailSectionType.passwords,
     title: 'Passwords',
     icon: Icons.password_rounded,
-    colors: [Color(0xFF2563EB), Color(0xFF7C3AED)],
+    colors: [Color(0xFF176EDE), Color(0xFF0C46B1)],
     items: [
       DetailItem(
         title: 'Google',
@@ -55,7 +55,7 @@ const List<DetailSection> demoSections = [
     type: DetailSectionType.cards,
     title: 'Cards',
     icon: Icons.credit_card_rounded,
-    colors: [Color(0xFFEA580C), Color(0xFFEF4444)],
+    colors: [Color(0xFFF97316), Color(0xFFEF4444)],
     items: [
       DetailItem(
         title: 'HDFC Platinum',
@@ -96,7 +96,7 @@ const List<DetailSection> demoSections = [
     type: DetailSectionType.addresses,
     title: 'Addresses',
     icon: Icons.home_rounded,
-    colors: [Color(0xFF059669), Color(0xFF14B8A6)],
+    colors: [Color(0xFF10B981), Color(0xFF06B6D4)],
     items: [
       DetailItem(
         title: 'Home',

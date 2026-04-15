@@ -19,7 +19,7 @@ class ProfilePage extends StatelessWidget {
         tileColor: theme.cardTheme.color,
         leading: GradientIconBadge(
           icon: icon,
-          colors: const [Color(0xFF1F4D8F), Color(0xFF5B8DEF)],
+          colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
           size: 42,
         ),
         title: Text(title),
