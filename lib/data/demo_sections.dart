@@ -104,7 +104,10 @@ final List<DetailSection> demoSections = [
         subtitle: 'Whitefield, Bengaluru',
         trailing: '560066',
         icon: Icons.home_rounded,
-        colors: [Color(0xFF0F172A), Color(0xFF0F172A)],
+        colors: [
+          Color(0xFFD2B48C),
+          Color(0xFF8B4513),
+        ],
         details: {
           'label': 'Home',
           'address_line': 'Whitefield, Bengaluru',

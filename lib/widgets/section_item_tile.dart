@@ -51,11 +51,25 @@ class SectionItemTile extends StatelessWidget {
                         ),
                       )
                     : Center(
-                        child: FaIcon(
-                          item.icon ?? FontAwesomeIcons.fileLines,
-                          color: item.colors?.first ?? theme.colorScheme.primary,
-                          size: 22,
-                        ),
+                        child: (item.colors != null && item.colors!.length > 1)
+                            ? ShaderMask(
+                                shaderCallback: (bounds) => LinearGradient(
+                                  colors: item.colors!,
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ).createShader(bounds),
+                                child: FaIcon(
+                                  item.icon ?? FontAwesomeIcons.fileLines,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
+                              )
+                            : FaIcon(
+                                item.icon ?? FontAwesomeIcons.fileLines,
+                                color: item.colors?.first ??
+                                    theme.colorScheme.primary,
+                                size: 22,
+                              ),
                       ),
               ),
               const SizedBox(width: 16),
