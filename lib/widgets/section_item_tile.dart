@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/detail_models.dart';
 
@@ -29,6 +30,35 @@ class SectionItemTile extends StatelessWidget {
           ),
           child: Row(
             children: [
+              SizedBox(
+                width: 36,
+                height: 36,
+                child: item.imageUrl != null
+                    ? Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Image.network(
+                          item.imageUrl!,
+                          fit: BoxFit.contain,
+                          errorBuilder: (ctx, _, __) => Icon(
+                            Icons.broken_image_rounded,
+                            size: 18,
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: FaIcon(
+                          item.icon ?? FontAwesomeIcons.fileLines,
+                          color: item.colors?.first ?? theme.colorScheme.primary,
+                          size: 22,
+                        ),
+                      ),
+              ),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,8 +69,13 @@ class SectionItemTile extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(item.subtitle),
+                    const SizedBox(height: 2),
+                    Text(
+                      item.subtitle,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
                   ],
                 ),
               ),

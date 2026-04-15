@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   local_auth: ^3.0.1
   shared_preferences: ^2.3.2
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:

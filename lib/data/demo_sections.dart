@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/detail_models.dart';
 
-const List<DetailSection> demoSections = [
+final List<DetailSection> demoSections = [
   DetailSection(
     type: DetailSectionType.passwords,
     title: 'Passwords',
-    icon: Icons.password_rounded,
-    colors: [Color(0xFF176EDE), Color(0xFF0C46B1)],
+    icon: Icons.key_rounded,
+    colors: [Color(0xFF03346E), Color(0xFF1E40AF)],
     items: [
       DetailItem(
         title: 'Google',
         subtitle: 'chanay@example.com',
         trailing: '••••••••',
+        imageUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/3840px-Google_%22G%22_logo.svg.png',
         details: {
           'app_name': 'Google',
           'username': 'chanay@example.com',
@@ -23,6 +26,8 @@ const List<DetailSection> demoSections = [
         title: 'Netflix',
         subtitle: 'chanay.stream@example.com',
         trailing: '••••••••',
+        imageUrl:
+            'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/227_Netflix_logo-512.png',
         details: {
           'app_name': 'Netflix',
           'username': 'chanay.stream@example.com',
@@ -33,6 +38,7 @@ const List<DetailSection> demoSections = [
         title: 'GitHub',
         subtitle: 'chanay-dev',
         trailing: '••••••••',
+        imageUrl: 'https://cdn-icons-png.flaticon.com/512/25/25231.png',
         details: {
           'app_name': 'GitHub',
           'username': 'chanay-dev',
@@ -43,6 +49,8 @@ const List<DetailSection> demoSections = [
         title: 'Amazon',
         subtitle: 'chanay.shop@example.com',
         trailing: '••••••••',
+        imageUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Amazon_icon.svg/2500px-Amazon_icon.svg.png',
         details: {
           'app_name': 'Amazon',
           'username': 'chanay.shop@example.com',
@@ -55,39 +63,32 @@ const List<DetailSection> demoSections = [
     type: DetailSectionType.cards,
     title: 'Cards',
     icon: Icons.credit_card_rounded,
-    colors: [Color(0xFFF97316), Color(0xFFEF4444)],
+    colors: [Color(0xFFF97316), Color(0xFFEC4899)],
     items: [
       DetailItem(
-        title: 'HDFC Platinum',
+        title: 'Visa',
         subtitle: '•••• 4821',
         trailing: 'Exp 2028',
+        imageUrl:
+            'https://download.logo.wine/logo/Visa_Inc./Visa_Inc.-Logo.wine.png',
         details: {
           'card_number': '•••• 4821',
-          'card_name': 'HDFC Platinum',
+          'card_name': 'Visa',
           'expiry_year': '2028',
           'cvv': '123',
         },
       ),
       DetailItem(
-        title: 'ICICI Coral',
+        title: 'Mastercard',
         subtitle: '•••• 1944',
         trailing: 'Exp 2027',
+        imageUrl:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png',
         details: {
           'card_number': '•••• 1944',
-          'card_name': 'ICICI Coral',
+          'card_name': 'Mastercard',
           'expiry_year': '2027',
           'cvv': '456',
-        },
-      ),
-      DetailItem(
-        title: 'Axis Rewards',
-        subtitle: '•••• 7710',
-        trailing: 'Exp 2029',
-        details: {
-          'card_number': '•••• 7710',
-          'card_name': 'Axis Rewards',
-          'expiry_year': '2029',
-          'cvv': '789',
         },
       ),
     ],
@@ -95,40 +96,20 @@ const List<DetailSection> demoSections = [
   DetailSection(
     type: DetailSectionType.addresses,
     title: 'Addresses',
-    icon: Icons.home_rounded,
-    colors: [Color(0xFF10B981), Color(0xFF06B6D4)],
+    icon: Icons.location_on_rounded,
+    colors: [Color(0xFF10B981), Color(0xFF0F766E)],
     items: [
       DetailItem(
         title: 'Home',
         subtitle: 'Whitefield, Bengaluru',
         trailing: '560066',
+        icon: Icons.home_rounded,
+        colors: [Color(0xFF0F172A), Color(0xFF0F172A)],
         details: {
           'label': 'Home',
           'address_line': 'Whitefield, Bengaluru',
           'city': 'Bengaluru',
           'postal_code': '560066',
-        },
-      ),
-      DetailItem(
-        title: 'Office',
-        subtitle: 'Koramangala, Bengaluru',
-        trailing: '560034',
-        details: {
-          'label': 'Office',
-          'address_line': 'Koramangala, Bengaluru',
-          'city': 'Bengaluru',
-          'postal_code': '560034',
-        },
-      ),
-      DetailItem(
-        title: 'Parents',
-        subtitle: 'Mysuru, Karnataka',
-        trailing: '570001',
-        details: {
-          'label': 'Parents',
-          'address_line': 'Mysuru, Karnataka',
-          'city': 'Mysuru',
-          'postal_code': '570001',
         },
       ),
     ],

@@ -3,28 +3,38 @@ import 'package:flutter/material.dart';
 enum DetailSectionType { passwords, cards, addresses }
 
 class DetailItem {
-  const DetailItem({
+  DetailItem({
     required this.title,
     required this.subtitle,
     required this.trailing,
+    this.icon,
+    this.imageUrl,
+    this.colors,
     this.details = const {},
   });
 
   final String title;
   final String subtitle;
   final String trailing;
+  final IconData? icon;
+  final String? imageUrl;
+  final List<Color>? colors;
   final Map<String, String> details;
 
   DetailItem copyWith({
     String? title,
     String? subtitle,
     String? trailing,
+    IconData? icon,
+    List<Color>? colors,
     Map<String, String>? details,
   }) {
     return DetailItem(
       title: title ?? this.title,
       subtitle: subtitle ?? this.subtitle,
       trailing: trailing ?? this.trailing,
+      icon: icon ?? this.icon,
+      colors: colors ?? this.colors,
       details: details ?? this.details,
     );
   }

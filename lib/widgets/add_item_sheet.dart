@@ -17,27 +17,47 @@ class AddItemSheet extends StatelessWidget {
       required String subtitle,
     }) {
       return ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: GradientIconBadge(
-          icon: icon,
-          colors: switch (type) {
-            DetailSectionType.passwords => const [
-              Color(0xFF2563EB),
-              Color(0xFF7C3AED),
-            ],
-            DetailSectionType.cards => const [
-              Color(0xFFEA580C),
-              Color(0xFFEF4444),
-            ],
-            DetailSectionType.addresses => const [
-              Color(0xFF059669),
-              Color(0xFF14B8A6),
-            ],
-          },
-          size: 42,
+        contentPadding: const EdgeInsets.symmetric(vertical: 4),
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: theme.colorScheme.primary.withValues(alpha: 0.1),
+            ),
+          ),
+          child: theme.brightness == Brightness.dark
+              ? ShaderMask(
+                  shaderCallback: (bounds) => LinearGradient(
+                    colors: [theme.colorScheme.primary, Colors.white],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
+                  child: Icon(
+                    icon,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                )
+              : Icon(
+                  icon,
+                  size: 20,
+                  color: theme.colorScheme.primary,
+                ),
         ),
-        title: Text(title),
-        subtitle: Text(subtitle),
+        minLeadingWidth: 0,
+        title: Text(
+          title,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: theme.textTheme.bodySmall,
+        ),
         onTap: () => Navigator.of(context).pop(type),
       );
     }
@@ -52,33 +72,34 @@ class AddItemSheet extends StatelessWidget {
             children: [
               Text(
                 'What do you want to add?',
-                style: theme.textTheme.titleLarge?.copyWith(
+                style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
+                  fontSize: 18,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 'Choose a category to add an item manually.',
-                style: theme.textTheme.bodyMedium?.copyWith(
+                style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               buildChoice(
                 type: DetailSectionType.passwords,
-                icon: Icons.password_rounded,
+                icon: Icons.key_rounded,
                 title: 'Password',
                 subtitle: 'Add an app, website, or account login',
               ),
               buildChoice(
                 type: DetailSectionType.cards,
-                icon: Icons.credit_card_rounded,
+                icon: Icons.wallet_rounded,
                 title: 'Card',
                 subtitle: 'Add a saved payment card manually',
               ),
               buildChoice(
                 type: DetailSectionType.addresses,
-                icon: Icons.home_rounded,
+                icon: Icons.location_on_rounded,
                 title: 'Address',
                 subtitle: 'Add a saved address for home, work, or more',
               ),

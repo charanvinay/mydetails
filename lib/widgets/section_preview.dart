@@ -28,26 +28,51 @@ class SectionPreview extends StatelessWidget {
           children: [
             Row(
               children: [
-                GradientIconBadge(
-                  icon: section.icon,
-                  colors: section.colors,
-                  size: 50,
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: theme.brightness == Brightness.dark
+                      ? ShaderMask(
+                          shaderCallback: (bounds) => LinearGradient(
+                            colors: [
+                              theme.colorScheme.primary,
+                              Colors.white,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ).createShader(bounds),
+                          child: Icon(
+                            section.icon,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Icon(
+                          section.icon,
+                          size: 20,
+                          color: theme.colorScheme.primary,
+                        ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         section.title,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 1),
                       Text(
                         '${section.items.length} items saved',
-                        style: theme.textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
