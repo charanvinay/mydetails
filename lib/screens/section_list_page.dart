@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../models/detail_models.dart';
 import '../widgets/gradient_icon_badge.dart';
@@ -20,6 +21,13 @@ class SectionListPage extends StatefulWidget {
 
 class _SectionListPageState extends State<SectionListPage> {
   String _query = '';
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,87 +44,54 @@ class _SectionListPageState extends State<SectionListPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          leadingWidth: 64,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: IconButton(
-              onPressed: () => Navigator.of(context).maybePop(),
-              icon: const Icon(Icons.arrow_back_rounded),
-            ),
-          ),
-          titleSpacing: 8,
-          title: Text(section.title),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          children: [
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: theme.cardTheme.color,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: theme.dividerColor.withValues(alpha: 0.9),
+        body: NestedScrollView(
+          controller: _scrollController,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              leadingWidth: 64,
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).maybePop(),
+                  icon: const Icon(Icons.arrow_back_rounded),
                 ),
               ),
-              child: Row(
-                children: [
-                  GradientIconBadge(
-                    icon: section.icon,
-                    colors: section.colors,
-                    size: 46,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          section.title,
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Text(
-                          '${section.items.length} saved items',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              titleSpacing: 8,
+              title: Text(section.title),
             ),
-            const SizedBox(height: 20),
-            SearchBar(
-              hintText: 'Search in ${section.title.toLowerCase()}...',
-              leading: const Icon(Icons.search_rounded),
-              onChanged: (value) => setState(() => _query = value),
-            ),
-            const SizedBox(height: 20),
-            for (var index = 0; index < filteredItems.length; index++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: SectionItemTile(
-                  item: filteredItems[index],
-                  onTap: () async {
-                    // Find original index
-                    final originalIndex = section.items.indexOf(
-                      filteredItems[index],
-                    );
-                    await widget.onItemTap(originalIndex);
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
-                ),
-              ),
-            const SizedBox(height: 32),
           ],
+          body: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: [
+              const SizedBox(height: 16),
+              SearchBar(
+                hintText: 'Search in ${section.title.toLowerCase()}...',
+                leading: const Icon(Icons.search_rounded),
+                onChanged: (value) => setState(() => _query = value),
+              ),
+              const SizedBox(height: 20),
+              for (var index = 0; index < filteredItems.length; index++)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: SectionItemTile(
+                    item: filteredItems[index],
+                    onTap: () async {
+                      // Find original index
+                      final originalIndex = section.items.indexOf(
+                        filteredItems[index],
+                      );
+                      await widget.onItemTap(originalIndex);
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ),
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
       ),
     );

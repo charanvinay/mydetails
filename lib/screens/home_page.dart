@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../models/detail_models.dart';
 import '../screens/detail_item_form_page.dart';
@@ -19,6 +20,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late List<DetailSection> _sections;
   String _searchQuery = '';
+  final ScrollController _scrollController = ScrollController();
+  bool _isScrollingDown = false;
 
   @override
   void initState() {
@@ -31,6 +34,12 @@ class _HomePageState extends State<HomePage> {
           ),
         )
         .toList();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   List<DetailSection> get _filteredSections {
@@ -138,35 +147,59 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('My Details'),
-          titleSpacing: 16,
-          actions: [
-            InkResponse(
-              onTap: _openProfile,
-              radius: 20,
-              child: const CircleAvatar(
-                radius: 16,
-                child: Icon(Icons.person_rounded, size: 18),
+      child: NotificationListener<UserScrollNotification>(
+        onNotification: (notification) {
+          if (notification.direction == ScrollDirection.reverse) {
+            if (!_isScrollingDown) setState(() => _isScrollingDown = true);
+          } else if (notification.direction == ScrollDirection.forward) {
+            if (_isScrollingDown) setState(() => _isScrollingDown = false);
+          }
+          return false;
+        },
+        child: Scaffold(
+          body: NestedScrollView(
+            controller: _scrollController,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverAppBar(
+                floating: true,
+                snap: true,
+                title: const Text('My Details'),
+                titleSpacing: 16,
+                actions: [
+                  InkResponse(
+                    onTap: _openProfile,
+                    radius: 20,
+                    child: const CircleAvatar(
+                      radius: 16,
+                      child: Icon(Icons.person_rounded, size: 18),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                ],
+              ),
+            ],
+            body: _HomeDashboard(
+              sections: _filteredSections,
+              onSearchChanged: (value) => setState(() => _searchQuery = value),
+              onShowMore: _openSectionList,
+              onItemTap: (type, itemIndex) =>
+                  _openEditor(type: type, itemIndex: itemIndex),
+            ),
+          ),
+          floatingActionButton: AnimatedSlide(
+            duration: const Duration(milliseconds: 300),
+            offset: _isScrollingDown ? const Offset(0, 2) : Offset.zero,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: _isScrollingDown ? 0 : 1,
+              child: FloatingActionButton(
+                onPressed: _openAddChooser,
+                child: const Icon(Icons.add_rounded),
               ),
             ),
-            const SizedBox(width: 16),
-          ],
-        ),
-        body: _HomeDashboard(
-          sections: _filteredSections,
-          onSearchChanged: (value) => setState(() => _searchQuery = value),
-          onShowMore: _openSectionList,
-          onItemTap: (type, itemIndex) =>
-              _openEditor(type: type, itemIndex: itemIndex),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _openAddChooser,
-          child: const Icon(Icons.add_rounded),
+          ),
         ),
       ),
     );
@@ -208,7 +241,7 @@ class _HomeDashboard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
         ],
-        const SizedBox(height: 100), // FAB space
+        const SizedBox(height: 32),
       ],
     );
   }

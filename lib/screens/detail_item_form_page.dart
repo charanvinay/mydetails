@@ -189,8 +189,7 @@ class _DetailItemFormPageState extends State<DetailItemFormPage> {
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
                   children: [
-                    _FormIntro(section: widget.section),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     for (final field in _fields) ...[
                       TextFormField(
                         controller: _controllers[field.key],
