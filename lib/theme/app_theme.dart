@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData light() {
-    const seed = Color(0xFF176EDE);
+    const seed = Color(0xFF03346E);
     final scheme = ColorScheme.fromSeed(
       seedColor: seed,
       brightness: Brightness.light,
-    ).copyWith(
-      primary: seed,
-      onPrimary: Colors.white,
-    );
+    ).copyWith(primary: seed, onPrimary: Colors.white);
 
     return ThemeData(
       useMaterial3: true,
@@ -78,6 +75,11 @@ class AppTheme {
         backgroundColor: seed,
         foregroundColor: Colors.white,
       ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          foregroundColor: seed,
+        ),
+      ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -89,14 +91,11 @@ class AppTheme {
   }
 
   static ThemeData dark() {
-    const seed = Color(0xFF176EDE);
+    const seed = Color(0xFF03346E);
     final scheme = ColorScheme.fromSeed(
       seedColor: seed,
       brightness: Brightness.dark,
-    ).copyWith(
-      primary: seed,
-      onPrimary: Colors.white,
-    );
+    ).copyWith(primary: seed, onPrimary: Colors.white);
 
     return ThemeData(
       useMaterial3: true,
@@ -124,6 +123,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           backgroundColor: seed.withValues(alpha: 0.15),
+          foregroundColor: Colors.white.withValues(alpha: 0.8),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -133,6 +133,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           backgroundColor: seed.withValues(alpha: 0.15),
+          foregroundColor: Colors.white.withValues(alpha: 0.8),
           side: BorderSide.none,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
@@ -154,6 +155,11 @@ class AppTheme {
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: seed,
         foregroundColor: Colors.white,
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          foregroundColor: seed,
+        ),
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {

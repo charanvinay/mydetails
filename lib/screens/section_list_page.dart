@@ -29,8 +29,8 @@ class _SectionListPageState extends State<SectionListPage> {
     final filteredItems = section.items.where((item) {
       final q = _query.toLowerCase();
       return item.title.toLowerCase().contains(q) ||
-             item.subtitle.toLowerCase().contains(q) ||
-             item.trailing.toLowerCase().contains(q);
+          item.subtitle.toLowerCase().contains(q) ||
+          item.trailing.toLowerCase().contains(q);
     }).toList();
 
     return GestureDetector(
@@ -101,7 +101,9 @@ class _SectionListPageState extends State<SectionListPage> {
                   item: filteredItems[index],
                   onTap: () async {
                     // Find original index
-                    final originalIndex = section.items.indexOf(filteredItems[index]);
+                    final originalIndex = section.items.indexOf(
+                      filteredItems[index],
+                    );
                     await widget.onItemTap(originalIndex);
                     if (mounted) {
                       setState(() {});

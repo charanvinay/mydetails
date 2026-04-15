@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
   late List<DetailSection> _sections;
   String _searchQuery = '';
@@ -36,14 +37,17 @@ class _HomePageState extends State<HomePage> {
     if (_searchQuery.isEmpty) return _sections;
 
     final query = _searchQuery.toLowerCase();
-    return _sections.map((section) {
-      final items = section.items.where((item) {
-        return item.title.toLowerCase().contains(query) ||
-               item.subtitle.toLowerCase().contains(query) ||
-               item.trailing.toLowerCase().contains(query);
-      }).toList();
-      return section.copyWith(items: items);
-    }).where((section) => section.items.isNotEmpty).toList();
+    return _sections
+        .map((section) {
+          final items = section.items.where((item) {
+            return item.title.toLowerCase().contains(query) ||
+                item.subtitle.toLowerCase().contains(query) ||
+                item.trailing.toLowerCase().contains(query);
+          }).toList();
+          return section.copyWith(items: items);
+        })
+        .where((section) => section.items.isNotEmpty)
+        .toList();
   }
 
   Future<void> _openAddChooser() async {
