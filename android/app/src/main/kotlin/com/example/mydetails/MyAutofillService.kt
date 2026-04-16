@@ -46,7 +46,7 @@ class MyAutofillService : AutofillService() {
             null
         }
 
-        // 1. INSTANT MODAL TRIGGER: Authenticate the Dataset directly for immediate fill
+        // 1. KEYBOARD TRIGGER: High-compatibility dataset authentication
         if (savedItems != null && savedItems.isNotEmpty() && parser.usernameId != null && parser.passwordId != null) {
             val intent = Intent(this, AutofillSelectActivity::class.java).apply {
                 putExtra("app_name", friendlyName)
@@ -61,8 +61,7 @@ class MyAutofillService : AutofillService() {
 
             val presentation = createPresentation("Autofill from MyDetails", "Select a saved account")
             
-            // We create a Dataset that requires 'unlocking' via our modal.
-            // When the modal returns a result, Android fills it immediately.
+            // We authenticate the DATASET (not the response). This is the key to keyboard visibility.
             val dataset = Dataset.Builder()
                 .setAuthentication(intentSender)
                 .setValue(parser.usernameId!!, null, presentation)
@@ -70,6 +69,8 @@ class MyAutofillService : AutofillService() {
                 .build()
 
             responseBuilder.addDataset(dataset)
+            // 2 corresponds to FillResponse.FLAG_TRACK_CONTEXT
+            responseBuilder.setFlags(2)
             hasData = true
         }
         

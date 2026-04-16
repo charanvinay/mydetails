@@ -86,15 +86,14 @@ class AutofillSelectActivity : Activity() {
 
         if (usernameId != null && passwordId != null) {
             val presentation = RemoteViews(packageName, android.R.layout.simple_list_item_1)
-            presentation.setTextViewText(android.R.id.text1, username)
+            presentation.setTextViewText(android.R.id.text1, "Autofill from MyDetails")
 
             val dataset = Dataset.Builder()
                 .setValue(usernameId, AutofillValue.forText(username), presentation)
                 .setValue(passwordId, AutofillValue.forText(password), presentation)
                 .build()
 
-            // Return JUST the dataset - this is the standard for Dataset-level authentication
-            // and results in an immediate fill on most devices.
+            // Essential: For Dataset authentication, the result MUST be a Dataset.
             replyIntent.putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, dataset)
             setResult(RESULT_OK, replyIntent)
             Log.d("AutofillSelectActivity", "Instant Dataset result sent")
