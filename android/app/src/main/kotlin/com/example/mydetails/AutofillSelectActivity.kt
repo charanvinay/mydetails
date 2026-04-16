@@ -85,18 +85,19 @@ class AutofillSelectActivity : Activity() {
         }
 
         if (usernameId != null && passwordId != null) {
-            val presentation = RemoteViews(packageName, android.R.layout.simple_list_item_1)
-            presentation.setTextViewText(android.R.id.text1, "Autofill from MyDetails")
+            // Restore the standard lock icon presentation for the result
+            val presentation = RemoteViews(packageName, R.layout.autofill_dataset_item)
+            presentation.setTextViewText(R.id.autofill_item_title, "Autofill from MyDetails")
+            presentation.setTextViewText(R.id.autofill_item_subtitle, "Select a saved account")
 
             val dataset = Dataset.Builder()
                 .setValue(usernameId, AutofillValue.forText(username), presentation)
                 .setValue(passwordId, AutofillValue.forText(password), presentation)
                 .build()
 
-            // Essential: For Dataset authentication, the result MUST be a Dataset.
             replyIntent.putExtra(AutofillManager.EXTRA_AUTHENTICATION_RESULT, dataset)
             setResult(RESULT_OK, replyIntent)
-            Log.d("AutofillSelectActivity", "Instant Dataset result sent")
+            Log.d("AutofillSelectActivity", "Stable Dataset result sent")
         } else {
             setResult(RESULT_CANCELED)
         }

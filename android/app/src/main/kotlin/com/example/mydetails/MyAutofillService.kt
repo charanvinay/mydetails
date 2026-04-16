@@ -46,7 +46,7 @@ class MyAutofillService : AutofillService() {
             null
         }
 
-        // 1. KEYBOARD TRIGGER: High-compatibility dataset authentication
+        // 1. STABLE KEYBOARD TRIGGER: The branded button with lock icon
         if (savedItems != null && savedItems.isNotEmpty() && parser.usernameId != null && parser.passwordId != null) {
             val intent = Intent(this, AutofillSelectActivity::class.java).apply {
                 putExtra("app_name", friendlyName)
@@ -59,9 +59,11 @@ class MyAutofillService : AutofillService() {
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             ).intentSender
 
-            val presentation = createPresentation("Autofill from MyDetails", "Select a saved account")
+            // Custom Lock Icon Presentation
+            val presentation = RemoteViews(packageName, R.layout.autofill_dataset_item)
+            presentation.setTextViewText(R.id.autofill_item_title, "Autofill from MyDetails")
+            presentation.setTextViewText(R.id.autofill_item_subtitle, "Select a saved account")
             
-            // We authenticate the DATASET (not the response). This is the key to keyboard visibility.
             val dataset = Dataset.Builder()
                 .setAuthentication(intentSender)
                 .setValue(parser.usernameId!!, null, presentation)
