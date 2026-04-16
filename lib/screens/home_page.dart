@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/detail_models.dart';
 import '../screens/detail_item_form_page.dart';
@@ -34,6 +35,60 @@ class _HomePageState extends State<HomePage> {
           ),
         )
         .toList();
+    _checkPendingSaves();
+  }
+
+  Future<void> _checkPendingSaves() async {
+    final prefs = await SharedPreferences.getInstance();
+    final pendingSaves = prefs.getStringList('autofill_vault');
+
+    if (pendingSaves != null && pendingSaves.isNotEmpty) {
+      setState(() {
+        for (final save in pendingSaves) {
+          final parts = save.split('|');
+          if (parts.length >= 3) {
+            final appName = parts[0];
+            final username = parts[1];
+            final password = parts[2];
+
+            // Avoid duplicates
+            final sectionIndex = _sections.indexWhere(
+              (s) => s.type == DetailSectionType.passwords,
+            );
+
+            if (sectionIndex != -1) {
+              final section = _sections[sectionIndex];
+              
+              // Only add if it doesn't exist yet
+              final exists = section.items.any((item) => item.title == appName && item.subtitle == username);
+              
+              if (!exists) {
+                final items = List<DetailItem>.from(section.items);
+                items.insert(
+                  0,
+                  DetailItem(
+                    title: appName,
+                    subtitle: username,
+                    trailing: '••••••••',
+                    icon: Icons.key_rounded,
+                    colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                    ],
+                    details: {
+                      'username': username,
+                      'password': password,
+                    },
+                  ),
+                );
+                _sections[sectionIndex] = section.copyWith(items: items);
+              }
+            }
+          }
+        }
+      });
+      // WE NO LONGER CLEAR IT HERE - It's now our permanent vault
+    }
   }
 
   @override

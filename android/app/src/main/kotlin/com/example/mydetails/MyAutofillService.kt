@@ -1,6 +1,7 @@
 package com.example.mydetails
 
 import android.service.autofill.AutofillService
+import android.service.autofill.Dataset
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveRequest
@@ -16,6 +17,9 @@ import android.service.autofill.CustomDescription
 import android.service.autofill.CharSequenceTransformation
 import java.util.regex.Pattern
 import android.content.pm.PackageManager
+import android.content.Context
+import android.content.Intent
+import android.app.PendingIntent
 
 class MyAutofillService : AutofillService() {
     
@@ -23,34 +27,64 @@ class MyAutofillService : AutofillService() {
         val structure = request.fillContexts.last().structure
         val parser = AutofillStructureParser(structure)
         
-        Log.d("MyAutofillService", "Detected package: ${parser.packageName}, domain: ${parser.webDomain}")
+        val friendlyName = when {
+            parser.webDomain != null -> formatDomain(parser.webDomain!!)
+            parser.packageName != null -> getAppLabel(parser.packageName!!)
+            else -> "Unknown App"
+        }
+        
+        Log.d("MyAutofillService", "Fill request for: $friendlyName")
         
         val responseBuilder = FillResponse.Builder()
         var hasData = false
+
+        // 0. FETCH THE VAULT
+        val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        val savedItems = try {
+            prefs.getStringSet("flutter.autofill_vault", null)
+        } catch (e: Exception) {
+            null
+        }
+
+        // 1. INSTANT MODAL TRIGGER: Authenticate the Dataset directly for immediate fill
+        if (savedItems != null && savedItems.isNotEmpty() && parser.usernameId != null && parser.passwordId != null) {
+            val intent = Intent(this, AutofillSelectActivity::class.java).apply {
+                putExtra("app_name", friendlyName)
+                putExtra("username_id", parser.usernameId)
+                putExtra("password_id", parser.passwordId)
+            }
+            
+            val intentSender = PendingIntent.getActivity(
+                this, 0, intent, 
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            ).intentSender
+
+            val presentation = createPresentation("Autofill from MyDetails", "Select a saved account")
+            
+            // We create a Dataset that requires 'unlocking' via our modal.
+            // When the modal returns a result, Android fills it immediately.
+            val dataset = Dataset.Builder()
+                .setAuthentication(intentSender)
+                .setValue(parser.usernameId!!, null, presentation)
+                .setValue(parser.passwordId!!, null, presentation)
+                .build()
+
+            responseBuilder.addDataset(dataset)
+            hasData = true
+        }
         
-        // If we find fields, we tell the OS we are interested in saving them
+        // 2. ENABLE SAVING: If we see fields, allow the user to save new ones
         if (parser.usernameId != null && parser.passwordId != null) {
             val saveInfoBuilder = SaveInfo.Builder(
                 SaveInfo.SAVE_DATA_TYPE_PASSWORD,
                 arrayOf(parser.usernameId!!, parser.passwordId!!)
             )
 
-            // Setup custom description layout
             val remoteViews = RemoteViews(packageName, R.layout.autofill_save_custom)
-            
-            // Set the app/domain name
-            val friendlyName = when {
-                parser.webDomain != null -> formatDomain(parser.webDomain!!)
-                parser.packageName != null -> getAppLabel(parser.packageName!!)
-                else -> "Unknown App"
-            }
             remoteViews.setTextViewText(R.id.autofill_save_app, friendlyName)
 
-            // Bind the username field to show the entered value
             val usernameTrans = CharSequenceTransformation.Builder(
-                parser.usernameId!!,
-                Pattern.compile("^(.*)$"),
-                "$1"
+                parser.usernameId!!, Pattern.compile("^(.*)$"), "$1"
             ).build()
 
             val customDescription = CustomDescription.Builder(remoteViews)
@@ -58,7 +92,6 @@ class MyAutofillService : AutofillService() {
                 .build()
 
             saveInfoBuilder.setCustomDescription(customDescription)
-            
             responseBuilder.setSaveInfo(saveInfoBuilder.build())
             hasData = true
         }
@@ -68,6 +101,13 @@ class MyAutofillService : AutofillService() {
         } else {
             callback.onSuccess(null)
         }
+    }
+
+    private fun createPresentation(title: String, subtitle: String): RemoteViews {
+        val presentation = RemoteViews(packageName, R.layout.autofill_dataset_item)
+        presentation.setTextViewText(R.id.autofill_item_title, title)
+        presentation.setTextViewText(R.id.autofill_item_subtitle, subtitle)
+        return presentation
     }
 
     override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
@@ -82,11 +122,22 @@ class MyAutofillService : AutofillService() {
             "Unknown App"
         }
 
-        val username = parser.usernameValue
-        val password = parser.passwordValue
+        val username = parser.usernameValue ?: ""
+        val password = parser.passwordValue ?: ""
         
-        Log.d("MyAutofillService", "User confirmed save for: $appName")
-        Log.d("MyAutofillService", "Credentials: $username / $password")
+        // Save to the exact file and key format that Flutter's shared_preferences expects
+        val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        val currentSaves = try {
+            prefs.getStringSet("flutter.autofill_vault", mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        } catch (e: Exception) {
+            mutableSetOf<String>()
+        }
+        
+        // Use a simple pipe-delimited string for the transfer
+        currentSaves.add("$appName|$username|$password")
+        prefs.edit().putStringSet("flutter.autofill_vault", currentSaves).apply()
+
+        Log.d("MyAutofillService", "Data persisted for Flutter: $appName")
         
         callback.onSuccess()
     }

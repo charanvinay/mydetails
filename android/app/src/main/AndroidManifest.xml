@@ -46,6 +46,11 @@
                 android:name="android.autofill"
                 android:resource="@xml/autofill_config" />
         </service>
+        <activity
+            android:name=".AutofillSelectActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false"
+            android:excludeFromRecents="true" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
