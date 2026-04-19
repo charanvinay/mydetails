@@ -127,6 +127,7 @@ class MyAutofillService : AutofillService() {
 
         val username = parser.usernameValue ?: ""
         val password = parser.passwordValue ?: ""
+        val identifier = parser.webDomain ?: parser.packageName ?: ""
         
         // Save to the exact file and key format that Flutter's shared_preferences expects
         val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
@@ -136,8 +137,8 @@ class MyAutofillService : AutofillService() {
             mutableSetOf<String>()
         }
         
-        // Use a simple pipe-delimited string for the transfer
-        currentSaves.add("$appName|$username|$password")
+        // Use a simple pipe-delimited string for the transfer (appName|username|password|identifier)
+        currentSaves.add("$appName|$username|$password|$identifier")
         prefs.edit().putStringSet("flutter.autofill_vault", currentSaves).apply()
 
         Log.d("MyAutofillService", "Data persisted for Flutter: $appName")

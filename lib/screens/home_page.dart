@@ -46,45 +46,48 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         for (final save in pendingSaves) {
           final parts = save.split('|');
-          if (parts.length >= 3) {
-            final appName = parts[0];
-            final username = parts[1];
-            final password = parts[2];
+              if (parts.length >= 3) {
+                final appName = parts[0];
+                final username = parts[1];
+                final password = parts[2];
+                final identifier = parts.length > 3 ? parts[3] : '';
 
-            // Avoid duplicates
-            final sectionIndex = _sections.indexWhere(
-              (s) => s.type == DetailSectionType.passwords,
-            );
-
-            if (sectionIndex != -1) {
-              final section = _sections[sectionIndex];
-              
-              // Only add if it doesn't exist yet
-              final exists = section.items.any((item) => item.title == appName && item.subtitle == username);
-              
-              if (!exists) {
-                final items = List<DetailItem>.from(section.items);
-                items.insert(
-                  0,
-                  DetailItem(
-                    title: appName,
-                    subtitle: username,
-                    trailing: '••••••••',
-                    icon: Icons.key_rounded,
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
-                    ],
-                    details: {
-                      'username': username,
-                      'password': password,
-                    },
-                  ),
+                // Avoid duplicates
+                final sectionIndex = _sections.indexWhere(
+                  (s) => s.type == DetailSectionType.passwords,
                 );
-                _sections[sectionIndex] = section.copyWith(items: items);
+
+                if (sectionIndex != -1) {
+                  final section = _sections[sectionIndex];
+                  
+                  // Only add if it doesn't exist yet
+                  final exists = section.items.any((item) => item.title == appName && item.subtitle == username);
+                  
+                  if (!exists) {
+                    final items = List<DetailItem>.from(section.items);
+                    items.insert(
+                      0,
+                      DetailItem(
+                        title: appName,
+                        subtitle: username,
+                        trailing: '••••••••',
+                        icon: Icons.key_rounded,
+                        colors: [
+                          Theme.of(context).colorScheme.primary,
+                          Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                        ],
+                        details: {
+                          'app_name': appName,
+                          'username': username,
+                          'password': password,
+                          'identifier': identifier,
+                        },
+                      ),
+                    );
+                    _sections[sectionIndex] = section.copyWith(items: items);
+                  }
+                }
               }
-            }
-          }
         }
       });
       // WE NO LONGER CLEAR IT HERE - It's now our permanent vault
