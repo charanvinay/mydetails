@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:local_auth/local_auth.dart';
 
 enum AuthState { authenticating, success, failed, unavailable }
@@ -21,6 +22,16 @@ class LocalDeviceAuthenticator extends DeviceAuthenticator {
 
   @override
   Future<AuthResult> authenticate() async {
+    if (kIsWeb || 
+        defaultTargetPlatform == TargetPlatform.macOS || 
+        defaultTargetPlatform == TargetPlatform.windows || 
+        defaultTargetPlatform == TargetPlatform.linux) {
+      return const AuthResult(
+        state: AuthState.success,
+        message: 'auth skipped on desktop/web',
+      );
+    }
+
     final localAuthentication = LocalAuthentication();
     final isSupported = await localAuthentication.isDeviceSupported();
     final canCheckBiometrics = await localAuthentication.canCheckBiometrics;
